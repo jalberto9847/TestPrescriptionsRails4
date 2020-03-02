@@ -11,8 +11,8 @@ class Task < ApplicationRecord
   end
 
   def part_of_velocity?
-    return false unless completed?
-    completed_at > Projec.velocity_length_in_days.days.ago
+    return false unless complete?
+    completed_at > Project.velocity_length_in_days.days.ago
   end
 
   def points_toward_velocity
