@@ -1,10 +1,9 @@
-class Project
+class Project < ApplicationRecord
 
-  attr_accessor :tasks, :due_date
+  has_many :tasks
 
-  def initialize
-    @tasks = []
-    @due_date = :due_date
+  def self.velocity_length_in_days
+    21
   end
 
   def incomplete_tasks
@@ -16,7 +15,7 @@ class Project
   end
 
   def total_size
-    tasks.sum(&:size)
+    tasks.to_a.sum(&:size)
   end
 
   def remaining_size
@@ -24,7 +23,7 @@ class Project
   end
 
   def completed_velocity
-    tasks.sum(&:points_toward_velocity)
+    tasks.to_a.sum(&:points_toward_velocity)
   end
 
   def current_rate
@@ -38,9 +37,5 @@ class Project
   def on_schedule?
     return false if projected_days_remaining.nan?
     (Date.today + projected_days_remaining) <= due_date
-  end
-
-  def self.velocity_length_in_days
-    21
   end
 end
