@@ -8,7 +8,7 @@ describe "adding projects" do
     click_on("Create Project")
     visit projects_path
 
-    expect(page).to have_content("Project Runaway")
+    expect(page).to have_content("Project Runway")
     expect(page).to have_content("8")
   end
 end
