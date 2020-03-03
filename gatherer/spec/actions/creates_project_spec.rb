@@ -31,6 +31,13 @@ describe "task string parsing" do
     specify { expect(tasks.map(&:size)).to eq([3]) }
   end
 
+  it "handles multiple tasks" do
+    creator = CreatesProject.new(name: "Test", task_string: "Start things:3\nEnd things:2")
+    tasks = creator.convert_string_to_tasks
+    expect(tasks).to match([an_object_having_attributes(title: "Start things", size: 3),
+                            an_object_having_attributes(title: "End things", size: 2)])
+  end
+
   describe "handles multiple tasks" do
     let(:task_string) { "Start things:3\nEnd things:2" }
     specify { expect(tasks.size).to eq(2) }
