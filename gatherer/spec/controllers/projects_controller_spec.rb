@@ -4,9 +4,15 @@ RSpec.describe ProjectsController, type: :controller do
 
   describe "POST create" do
     it "creates a project" do
-      post :create, params: {name: "Runway", tasks: "Start something:2"}
+      post :create, :params => {project: {name: "Runway", tasks: "Start something:2"}}
       expect(response).to redirect_to(projects_path)
       expect(assigns(:action).project.name).to eq("Runway")
+    end
+
+    it "does back to the form on failure" do
+      post :create, :params => { project: {name: "", tasks: ""} }
+      expect(response).to render_template(:new)
+      expect(assigns(:project)).to be_present
     end
   end
 end
