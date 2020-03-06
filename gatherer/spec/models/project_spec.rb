@@ -89,5 +89,12 @@ RSpec.describe Project do
       project = Project.find(1)
       expect(project.name).to eq("Project GreenLight")
     end
+
+    it "mocks an object" do
+      mock_project = Project.new(name: "Project GreenLight")
+      expect(mock_project).to receive(:name).and_return("Fred")
+      expect(mock_project.name).to eq("Fred")
+    end
+
   end
 end
