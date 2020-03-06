@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe ProjectsController, type: :controller do
-
   describe "POST create" do
     it "creates a project" do
       post :create, :params => {project: {name: "Runway", tasks: "Start something:2"}}
@@ -13,6 +12,23 @@ RSpec.describe ProjectsController, type: :controller do
       post :create, :params => { project: {name: "", tasks: ""} }
       expect(response).to render_template(:new)
       expect(assigns(:project)).to be_present
+    end
+
+    it "fails create gracefully" do
+      action_stub = double(create: false, project: Project.new)
+      expect(CreatesProject).to receive(:new).and_return(action_stub)
+      post :create, :params => {project: {name: 'Project Runway' } }
+      expect(response).to render_template(:new)
+    end
+  end
+
+  describe "PATCH update" do
+    it "fails update gracefully" do
+      sample = Project.create!(name: "Test Project")
+      expect(sample).to receive(:update_attributes).and_return(false)
+      allow(Project).to receive(:find).and_return(sample)
+      patch :update, params: { id: sample.id, project: {name: "Fred"}}
+      expect(response).to render_template(:edit)
     end
   end
 end
